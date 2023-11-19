@@ -5,8 +5,6 @@ import { searchImages } from "./api-services";
 
 const searchForm = document.getElementById("search-form");
 const gallery = document.querySelector(".gallery");
-const loadMoreBtn = document.querySelector(".load-more");
-
 let page = 1;
 
 searchForm.addEventListener("submit", async (e) => {
@@ -19,13 +17,6 @@ searchForm.addEventListener("submit", async (e) => {
 
   clearGallery();
   page = 1;
-  await performSearch(searchQuery, page);
-  showLoadMoreButton();
-});
-
-loadMoreBtn.addEventListener("click", async () => {
-  const searchQuery = searchForm.elements.searchQuery.value.trim();
-  page++;
   await performSearch(searchQuery, page);
 });
 
@@ -40,21 +31,12 @@ async function performSearch(query, pageNumber) {
     } else {
       renderImages(hits);
       Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+
       if (hits.length < totalHits) {
-        showLoadMoreButton();
+        page++;
       } else {
-        hideLoadMoreButton();
         Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
       }
-
-      const { height: cardHeight } = document
-        .querySelector(".gallery")
-        .firstElementChild.getBoundingClientRect();
-
-      window.scrollBy({
-        top: cardHeight * 2,
-        behavior: "smooth",
-      });
     }
   } catch (error) {
     console.error("Error fetching images:", error);
@@ -100,10 +82,11 @@ function clearGallery() {
   gallery.innerHTML = "";
 }
 
-function showLoadMoreButton() {
-  loadMoreBtn.style.display = "block";
-}
+window.addEventListener("scroll", () => {
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 
-function hideLoadMoreButton() {
-  loadMoreBtn.style.display = "none";
-}
+  if (scrollTop + clientHeight >= scrollHeight - 100) {
+        const searchQuery = searchForm.elements.searchQuery.value.trim();
+    performSearch(searchQuery, page);
+  }
+});

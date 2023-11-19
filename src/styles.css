@@ -1,10 +1,14 @@
 body {
   font-family: 'Arial', sans-serif;
-  margin: 20px;
+  margin: auto;
 }
 
 .search-form {
   margin-bottom: 20px;
+  margin: auto;
+  text-align: center;
+  background-color: #6077dc;
+  padding: 20px;
 }
 
 .gallery {
