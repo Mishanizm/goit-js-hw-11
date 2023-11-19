@@ -1,9 +1,7 @@
-import axios from "axios";
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 import Notiflix from "notiflix";
-
-
+import { searchImages } from "./api-services";
 
 const searchForm = document.getElementById("search-form");
 const gallery = document.querySelector(".gallery");
@@ -21,31 +19,19 @@ searchForm.addEventListener("submit", async (e) => {
 
   clearGallery();
   page = 1;
-  await searchImages(searchQuery, page);
+  await performSearch(searchQuery, page);
   showLoadMoreButton();
 });
 
 loadMoreBtn.addEventListener("click", async () => {
   const searchQuery = searchForm.elements.searchQuery.value.trim();
   page++;
-  await searchImages(searchQuery, page);
+  await performSearch(searchQuery, page);
 });
 
-async function searchImages(query, pageNumber) {
+async function performSearch(query, pageNumber) {
   try {
-    const response = await axios.get("https://pixabay.com/api/", {
-      params: {
-        key: "40755274-d9726296ed4dd82e44d7fe7af",
-        q: query,
-        image_type: "photo",
-        orientation: "horizontal",
-        safesearch: true,
-        page: pageNumber,
-        per_page: 40,
-      },
-    });
-
-    const { hits, totalHits } = response.data;
+    const { hits, totalHits } = await searchImages(query, pageNumber);
 
     if (hits.length === 0) {
       Notiflix.Notify.failure(
@@ -61,7 +47,6 @@ async function searchImages(query, pageNumber) {
         Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
       }
 
-   
       const { height: cardHeight } = document
         .querySelector(".gallery")
         .firstElementChild.getBoundingClientRect();
