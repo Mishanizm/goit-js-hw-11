@@ -3,7 +3,7 @@ import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 import Notiflix from "notiflix";
 
-axios.defaults.headers.common["x-api-key"] = "40755274-d9726296ed4dd82e44d7fe7af";
+
 
 const searchForm = document.getElementById("search-form");
 const gallery = document.querySelector(".gallery");
@@ -35,7 +35,7 @@ async function searchImages(query, pageNumber) {
   try {
     const response = await axios.get("https://pixabay.com/api/", {
       params: {
-        key: "твой ключ",
+        key: "40755274-d9726296ed4dd82e44d7fe7af",
         q: query,
         image_type: "photo",
         orientation: "horizontal",
