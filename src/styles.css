@@ -39,9 +39,10 @@ body {
 }
 
 .load-more {
-  margin-top: 20px;
+  margin: auto;
+  margin-bottom: 20px;
   padding: 10px;
-  background-color: #4caf50;
+  background-color: #6077dc;
   color: #fff;
   border: none;
   border-radius: 5px;
